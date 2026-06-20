@@ -112,7 +112,6 @@ public:
                     left++;
                     right--;
 
-                    // Skip duplicates
                     while (left < right && nums[left] == nums[left - 1])
                         left++;
 
@@ -131,3 +130,78 @@ public:
     }
 };
 _____________________________________________________________________________________________________________________
+class Solution {
+public:
+    vector<vector<int>> ans;
+
+    void solve(vector<int>& candidates, int target, int index, vector<int>& temp) {
+        if (target == 0) {
+            ans.push_back(temp);
+            return;
+        }
+
+        if (target < 0 || index >= candidates.size()) {
+            return;
+        }
+
+        temp.push_back(candidates[index]);
+        solve(candidates, target - candidates[index], index, temp);
+        temp.pop_back();
+
+        
+        solve(candidates, target, index + 1, temp);
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> temp;
+        solve(candidates, target, 0, temp);
+        return ans;
+    }
+};
+____________________________________________________________________________________________________________________________________________________
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        int candidate = nums[0];
+        int count = 0;
+
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+
+            if (num == candidate)
+                count++;
+            else
+                count--;
+        }
+
+        return candidate;
+    }
+};
+_______________________________________________________________________________________________________________________________________________
+class Solution {
+public:
+    vector<vector<int>> ans;
+    vector<int> temp;
+
+    void dfs(vector<int>& c, int target, int i) {
+        if (target == 0) {
+            ans.push_back(temp);
+            return;
+        }
+
+        if (i == c.size() || target < 0) return;
+
+        temp.push_back(c[i]);
+        dfs(c, target - c[i], i);   // reuse same element
+        temp.pop_back();
+
+        dfs(c, target, i + 1);      // skip element
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        dfs(candidates, target, 0);
+        return ans;
+    }
+};
